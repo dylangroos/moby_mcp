@@ -1,13 +1,14 @@
-.PHONY: help generate-key start stop restart logs build dev clean
+.PHONY: help generate-key start stop restart logs build dev clean shell
 
 help:
-	@echo "MCP File System Server - Available Commands:"
+	@echo "Moby MCP Server - Available Commands:"
 	@echo ""
 	@echo "  make generate-key  - Generate a new random API key"
 	@echo "  make start         - Start the Docker containers"
 	@echo "  make stop          - Stop the Docker containers"
 	@echo "  make restart       - Restart the Docker containers"
 	@echo "  make logs          - View server logs"
+	@echo "  make shell         - Open a shell inside the container"
 	@echo "  make build         - Rebuild Docker images"
 	@echo "  make dev           - Run in local development mode"
 	@echo "  make clean         - Remove containers and volumes"
@@ -38,6 +39,10 @@ restart:
 
 logs:
 	docker compose logs -f mcp-server
+
+shell:
+	@echo "Opening shell in mcp-server container..."
+	docker compose exec mcp-server /bin/bash
 
 build:
 	@echo "Building MCP server..."
