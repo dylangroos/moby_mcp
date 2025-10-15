@@ -44,12 +44,12 @@ MCP Client --HTTPS--> ngrok --HTTP--> FastMCP Server ---> /data volume
 
 ## Available Operations
 
-- `read_file(path)` - Read file contents (.txt and .json only)
-- `write_file(path, content)` - Create/update files (.txt and .json only)
-- `list_directory(path)` - List directory contents (shows only .txt and .json files)
-- `delete_file(path)` - Delete files (.txt and .json only)
+- `read_file(path)` - Read file contents (.txt and .md only)
+- `write_file(path, content)` - Create/update files (.txt and .md only)
+- `list_directory(path)` - List directory contents (shows only .txt and .md files)
+- `delete_file(path)` - Delete files (.txt and .md only)
 
-All operations are relative to the `./data` directory. Only `.txt` and `.json` file types are allowed for security.
+All operations are relative to the `./data` directory. Only `.txt` and `.md` file types are allowed for security.
 
 ## Configuration
 
@@ -131,7 +131,7 @@ docker compose logs -f mcp-server
 ## Security Notes
 
 - **Keep your API key secret** - Never commit `.env` to git
-- **File type restrictions** - Only `.txt` and `.json` files can be accessed
+- **File type restrictions** - Only `.txt` and `.md` files can be accessed
 - **Path traversal protection** - Prevents access outside the data directory
 - **Generate strong keys** - Use `make generate-key` for cryptographically secure API keys
 - **ngrok URLs** - Free tier provides random URLs that change on restart
