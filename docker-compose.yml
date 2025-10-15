@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mcp-server:
+    build: .
+    container_name: mcp-file-server
+    environment:
+      - API_KEY=${API_KEY}
+      - PORT=8000
+    volumes:
+      - ${DATA_DIRECTORY:-./data}:/data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - mcp-network
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: mcp-ngrok
+    command:
+      - "http"
+      - "mcp-server:8000"
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    ports:
+      - "4040:4040"  # ngrok web interface
+    depends_on:
+      - mcp-server
+    restart: unless-stopped
+    networks:
+      - mcp-network
+
+networks:
+  mcp-network:
+    driver: bridge
+
