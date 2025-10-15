@@ -93,7 +93,7 @@ This will:
 - Install uv if needed
 - Set up virtual environment
 - Install dependencies
-- Run server on http://localhost:8000
+- Run server on http://localhost:8080
 
 ## Technology Stack
 

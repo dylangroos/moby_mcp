@@ -44,7 +44,7 @@ EOF
     echo "   - API_KEY (generate with: openssl rand -hex 32)"
     echo ""
     echo "Note: ngrok is not needed for local development."
-    echo "      The server will run on http://localhost:8000"
+    echo "      The server will run on http://localhost:8080"
     echo ""
 fi
 
@@ -79,10 +79,10 @@ echo "SUCCESS: Dependencies installed"
 echo ""
 
 # Override BASE_DIR for local development
-export PORT=8000
+export PORT=8080
 
 echo "Starting server..."
-echo "   URL: http://localhost:8000"
+echo "   URL: http://localhost:8080"
 echo "   API Key: $API_KEY"
 echo "   Data directory: $(pwd)/data"
 echo ""
