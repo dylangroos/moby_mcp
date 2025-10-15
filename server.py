@@ -7,20 +7,36 @@ from pathlib import Path
 from typing import Any, Dict
 from dotenv import load_dotenv
 from fastmcp import FastMCP
+from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
 
 # Load environment variables
 load_dotenv()
 
 # Configuration
 BASE_DIR = Path("/data")  # Base directory for file operations (Docker volume)
+API_KEY = os.getenv("API_KEY", "")
 PORT = int(os.getenv("PORT", "8000"))
+
+# Validate configuration
+if not API_KEY:
+    raise ValueError("API_KEY environment variable must be set")
 
 # Allowed file extensions
 ALLOWED_EXTENSIONS = {".txt", ".json"}
 
-# Initialize FastMCP server
-# Note: Authentication can be added via reverse proxy (nginx, Caddy, etc.)
-mcp = FastMCP(name="filesystem-server")
+# Simple static token authentication
+# Clients send: Authorization: Bearer <API_KEY>
+auth = StaticTokenVerifier(
+    tokens={
+        API_KEY: {
+            "client_id": "api_user",
+            "scopes": ["read", "write", "delete"]
+        }
+    }
+)
+
+# Initialize FastMCP server with simple API key auth
+mcp = FastMCP(name="filesystem-server", auth=auth)
 
 
 def validate_path(path: str) -> Path:
