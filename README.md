@@ -1,58 +1,55 @@
-# MCP File System Server
+# Moby MCP Server
 
-A Docker-containerized MCP (Model Context Protocol) server that exposes file system operations over HTTPS via ngrok with API key authentication.
+A Docker-containerized MCP (Model Context Protocol) server that exposes file system operations over HTTPS via ngrok with API key authentication. Named after Docker's Moby project, it provides a simple filesystem interface for MCP clients. Built with FastMCP.
 
 ## Features
 
-- Full file system access (read, write, list, delete, mkdir)
-- API key authentication
+- File system access (read, write, list, delete) for .txt and .json files only
+- Simple API key authentication
 - Public HTTPS access via ngrok
 - Docker containerized
 - Fast dependency management with uv
+- Streamable HTTP transport
 
 ## Quick Start
 
-1. **Copy and configure environment file:**
+1. **Generate an API key:**
+   ```bash
+   make generate-key
+   ```
+
+2. **Configure environment:**
    ```bash
    # The start.sh script will create .env if it doesn't exist
    ./start.sh
-   ```
-
-2. **Edit `.env` file:**
-   ```bash
-   # Generate API key
-   openssl rand -hex 32
-   
-   # Get ngrok token from: https://dashboard.ngrok.com/get-started/your-authtoken
-   # Add both to .env file
+   # Follow the prompts to add your API_KEY and NGROK_AUTHTOKEN
    ```
 
 3. **Start the server:**
    ```bash
-   ./start.sh
+   make start
    ```
 
-4. **Test it:**
+4. **View logs:**
    ```bash
-   ./test_server.sh
+   make logs
    ```
 
 ## Architecture
 
 ```
-Web Client --HTTPS--> ngrok --HTTP--> MCP Server ---> /data volume
-                                (with auth)
+MCP Client --HTTPS--> ngrok --HTTP--> FastMCP Server ---> /data volume
+                                (API key auth)
 ```
 
 ## Available Operations
 
-- `read_file(path)` - Read file contents
-- `write_file(path, content)` - Create/update files
-- `list_directory(path)` - List directory contents
-- `delete_file(path)` - Delete files
-- `create_directory(path)` - Create directories
+- `read_file(path)` - Read file contents (.txt and .json only)
+- `write_file(path, content)` - Create/update files (.txt and .json only)
+- `list_directory(path)` - List directory contents (shows only .txt and .json files)
+- `delete_file(path)` - Delete files (.txt and .json only)
 
-All operations are relative to the `./data` directory.
+All operations are relative to the `./data` directory. Only `.txt` and `.json` file types are allowed for security.
 
 ## Configuration
 
@@ -70,22 +67,26 @@ Configure your MCP client with:
 
 ```json
 {
-  "name": "filesystem-server",
+  "name": "moby",
   "transport": {
-    "type": "sse",
-    "url": "https://your-ngrok-url.ngrok.io/sse"
+    "type": "http",
+    "url": "https://your-ngrok-url.ngrok-free.app/mcp"
   },
   "headers": {
-    "Authorization": "Bearer your-api-key"
+    "Authorization": "Bearer your-api-key-here"
   }
 }
 ```
+
+**Important:** The Authorization header must be exactly `Bearer <your-api-key>` with no extra quotes or colons.
 
 ## Development
 
 Run locally without Docker:
 
 ```bash
+make dev
+# or
 ./dev.sh
 ```
 
@@ -98,37 +99,43 @@ This will:
 ## Technology Stack
 
 - **Python 3.11+** - Modern async Python
+- **FastMCP** - Pythonic MCP server framework
 - **uv** - Fast Python package manager (10-100x faster than pip)
 - **MCP SDK** - Official Model Context Protocol implementation
-- **aiohttp** - Async HTTP server for SSE transport
 - **Docker** - Containerization
 - **ngrok** - Secure public tunneling
 
-## Useful Commands
+## Makefile Commands
 
 ```bash
-# View logs
-docker-compose logs -f
+make generate-key  # Generate a new random API key
+make start         # Start the Docker containers
+make stop          # Stop the Docker containers
+make restart       # Restart the Docker containers
+make logs          # View server logs (follow mode)
+make build         # Rebuild Docker images
+make dev           # Run in local development mode
+make clean         # Remove containers and volumes
+```
 
-# Stop server
-docker-compose down
-
-# Restart server
-docker-compose restart
-
+**Other useful commands:**
+```bash
 # View ngrok dashboard
 open http://localhost:4040
 
-# Rebuild after changes
-docker-compose up --build
+# Manual Docker commands
+docker compose up --build -d
+docker compose logs -f mcp-server
 ```
 
 ## Security Notes
 
-- Keep your API key secret
-- Only mount directories you want to expose
-- Path traversal protection is implemented
-- ngrok free tier provides random URLs that change on restart
+- **Keep your API key secret** - Never commit `.env` to git
+- **File type restrictions** - Only `.txt` and `.json` files can be accessed
+- **Path traversal protection** - Prevents access outside the data directory
+- **Generate strong keys** - Use `make generate-key` for cryptographically secure API keys
+- **ngrok URLs** - Free tier provides random URLs that change on restart
+- **Directory access** - Only mount directories you want to expose
 
 ## Troubleshooting
 

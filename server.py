@@ -1,6 +1,6 @@
 """
-MCP File System Server
-Exposes file system operations via MCP protocol over HTTP.
+Moby MCP Server
+Docker-style filesystem server exposing file operations via MCP protocol over HTTP.
 """
 import os
 from pathlib import Path
@@ -36,7 +36,7 @@ auth = StaticTokenVerifier(
 )
 
 # Initialize FastMCP server with simple API key auth
-mcp = FastMCP(name="filesystem-server", auth=auth)
+mcp = FastMCP(name="moby", auth=auth)
 
 
 def validate_path(path: str) -> Path:
@@ -206,11 +206,11 @@ if __name__ == "__main__":
     # Ensure BASE_DIR exists
     BASE_DIR.mkdir(parents=True, exist_ok=True)
     
-    print(f"Starting MCP File System Server")
+    print(f"Starting Moby MCP Server")
     print(f"Port: {PORT}")
     print(f"Base directory: {BASE_DIR}")
     print(f"Allowed file types: {', '.join(ALLOWED_EXTENSIONS)}")
-    print(f"Note: Add authentication via reverse proxy for production use")
+    print(f"Authentication: API key required")
     
     # Run with HTTP transport
     mcp.run(transport="http", host="0.0.0.0", port=PORT, path="/mcp")
