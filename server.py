@@ -22,7 +22,7 @@ if not API_KEY:
     raise ValueError("API_KEY environment variable must be set")
 
 # Allowed file extensions
-ALLOWED_EXTENSIONS = {".txt", ".json"}
+ALLOWED_EXTENSIONS = {".txt", ".md"}
 
 # Simple static token authentication
 # Clients send: Authorization: Bearer <API_KEY>
@@ -69,7 +69,7 @@ def validate_file_type(path: Path) -> None:
 
 @mcp.tool(
     name="read_file",
-    description="Read the contents of a file (only .txt and .json files allowed)",
+    description="Read the contents of a file (only .txt and .md files allowed)",
 )
 def read_file(path: str) -> Dict[str, Any]:
     """Read a file and return its contents"""
@@ -96,7 +96,7 @@ def read_file(path: str) -> Dict[str, Any]:
 
 @mcp.tool(
     name="write_file",
-    description="Write content to a file (creates or overwrites, only .txt and .json files allowed)",
+    description="Write content to a file (creates or overwrites, only .txt and .md files allowed)",
 )
 def write_file(path: str, content: str) -> Dict[str, Any]:
     """Write content to a file"""
@@ -122,7 +122,7 @@ def write_file(path: str, content: str) -> Dict[str, Any]:
 
 @mcp.tool(
     name="list_directory",
-    description="List contents of a directory (only shows .txt and .json files)",
+    description="List contents of a directory (only shows .txt and .md files)",
 )
 def list_directory(path: str = "") -> Dict[str, Any]:
     """List directory contents"""
@@ -157,7 +157,7 @@ def list_directory(path: str = "") -> Dict[str, Any]:
 
 @mcp.tool(
     name="delete_file",
-    description="Delete a file (only .txt and .json files allowed)",
+    description="Delete a file (only .txt and .md files allowed)",
 )
 def delete_file(path: str) -> Dict[str, Any]:
     """Delete a file"""

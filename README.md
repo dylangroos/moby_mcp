@@ -4,7 +4,7 @@ A Docker-containerized MCP (Model Context Protocol) server that exposes file sys
 
 ## Features
 
-- File system access (read, write, list, delete) for .txt and .json files only
+- File system access (read, write, list, delete) for .txt and .md files only
 - Simple API key authentication
 - Public HTTPS access via ngrok
 - Docker containerized
