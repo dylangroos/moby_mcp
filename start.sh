@@ -25,6 +25,9 @@ NGROK_AUTHTOKEN=your-ngrok-authtoken-here
 # Directory to expose via the file system server
 # This will be mounted to /data in the container
 DATA_DIRECTORY=./data
+
+# Port for the MCP server (default: 8080)
+PORT=8080
 EOF
     
     echo "SUCCESS: Created .env file"

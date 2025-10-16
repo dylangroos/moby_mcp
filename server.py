@@ -15,7 +15,7 @@ load_dotenv()
 # Configuration
 BASE_DIR = Path("/data")  # Base directory for file operations (Docker volume)
 API_KEY = os.getenv("API_KEY", "")
-PORT = int(os.getenv("PORT", "8000"))
+PORT = int(os.getenv("PORT", "8080"))
 
 # Validate configuration
 if not API_KEY:

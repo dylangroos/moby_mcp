@@ -21,8 +21,8 @@ COPY auth_middleware.py .
 # Create data directory
 RUN mkdir -p /data
 
-# Expose port 8000
-EXPOSE 8000
+# Expose port (configurable via PORT env var, default: 8080)
+EXPOSE 8080
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1

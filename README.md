@@ -13,27 +13,21 @@ A Docker-containerized MCP (Model Context Protocol) server that exposes file sys
 
 ## Quick Start
 
-1. **Generate an API key:**
-   ```bash
-   make generate-key
-   ```
+```bash
+# 1. Generate an API key
+make generate-key
 
-2. **Configure environment:**
-   ```bash
-   # The start.sh script will create .env if it doesn't exist
-   ./start.sh
-   # Follow the prompts to add your API_KEY and NGROK_AUTHTOKEN
-   ```
+# 2. Create .env file and add your API_KEY and NGROK_AUTHTOKEN
+# (See Configuration section below)
 
-3. **Start the server:**
-   ```bash
-   make start
-   ```
+# 3. Start the server
+make start
 
-4. **View logs:**
-   ```bash
-   make logs
-   ```
+# 4. View logs and get your public URL
+make logs
+
+# 5. Your server is live! Check http://localhost:4040 for the ngrok URL
+```
 
 ## Architecture
 
@@ -55,10 +49,28 @@ All operations are relative to the `./data` directory. Only `.txt` and `.md` fil
 
 Required environment variables in `.env`:
 
-```
+```bash
+# Generate with: make generate-key
 API_KEY=your-secret-api-key-here
+
+# Get from: https://dashboard.ngrok.com/get-started/your-authtoken
 NGROK_AUTHTOKEN=your-ngrok-authtoken-here
+
+# Local directory to expose (mounted to /data in container)
 DATA_DIRECTORY=./data
+
+# Server port (default: 8080)
+PORT=8080
+```
+
+**Quick setup:**
+```bash
+# Generate a secure API key
+make generate-key
+
+# Edit .env and add your API_KEY and NGROK_AUTHTOKEN
+# Then start the server
+make start
 ```
 
 ## Usage from MCP Client
@@ -107,25 +119,25 @@ This will:
 
 ## Makefile Commands
 
+All server operations are managed through simple Makefile targets:
+
 ```bash
+make help          # Show all available commands
 make generate-key  # Generate a new random API key
 make start         # Start the Docker containers
 make stop          # Stop the Docker containers
 make restart       # Restart the Docker containers
 make logs          # View server logs (follow mode)
+make shell         # Open a shell inside the container
 make build         # Rebuild Docker images
-make dev           # Run in local development mode
+make dev           # Run in local development mode (no Docker)
 make clean         # Remove containers and volumes
 ```
 
-**Other useful commands:**
+**Useful links:**
 ```bash
-# View ngrok dashboard
+# View ngrok dashboard (shows your public URL)
 open http://localhost:4040
-
-# Manual Docker commands
-docker compose up --build -d
-docker compose logs -f mcp-server
 ```
 
 ## Security Notes
